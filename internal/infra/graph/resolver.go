@@ -8,4 +8,5 @@ import "github.com/pablorodrigovieira/go-clean-architecture/internal/usecase"
 
 type Resolver struct {
 	CreateOrderUseCase *usecase.CreateOrderUseCase
+	ListOrdersUseCase  *usecase.ListOrdersUseCase
 }
