@@ -1,0 +1,33 @@
+# Git
+.git
+.gitignore
+
+# Docker
+.docker
+Dockerfile
+docker-compose.yaml
+
+# IDE
+.vscode
+.idea
+
+# OS
+.DS_Store
+
+# Go
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+
+# Binaries
+cmd/ordersystem/ordersystem
+
+# Environment
+.env
+
+# Documentation
+README.md

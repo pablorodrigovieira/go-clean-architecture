@@ -23,38 +23,54 @@ Now it’s time to put your hands to work. For this challenge, you need to creat
 
 # Clean Architecture - Order System (Solution)
 
-This service exposes REST, gRPC, and GraphQL endpoints for order creation, using MySQL and RabbitMQ as dependencies.
+This service exposes REST, gRPC, and GraphQL endpoints for order creation and listing, using MySQL and RabbitMQ as dependencies.
 
-## Prerequisites
+## Quick Start
 
-- Go 1.21+ installed
-- Docker and Docker Compose (for MySQL and RabbitMQ)
-
-## Start Dependencies (MySQL + RabbitMQ)
+To start all services (MySQL, RabbitMQ, and the App):
 
 ```zsh
 docker compose up -d
 ```
 
-- MySQL: `localhost:3306` (db `orders`, user `root`, pass `root`)
-- RabbitMQ: `amqp://guest:guest@localhost:5672/` (Management UI `http://localhost:15672/#/`, user `guest`, password `guest`)
+This will:
+
+- Start MySQL on port `3306` with the `orders` database (automatically runs migrations)
+- Start RabbitMQ on port `5672` (Management UI on port `15672`)
+- Build and start the application automatically with:
+  - REST API on port `8000`
+  - GraphQL on port `8080`
+  - gRPC on port `50051`
+
+To view application logs:
+
+```zsh
+docker compose logs -f app
+```
+
+To stop all services:
+
+```zsh
+docker compose down
+```
 
 ### Accessing MySQL via Docker
 
-Use Docker Compose to open a shell inside the MySQL container and connect with the MySQL CLI:
-
 ```zsh
-docker compose exec mysql bash
-mysql -uroot -p orders
+docker compose exec mysql mysql -uroot -proot orders
 ```
 
-- When prompted for the password, enter `root`.
+## Running Locally (Development)
 
-````
+If you want to run the application locally (outside Docker) for development:
 
-## Environment
+1. Start only the dependencies:
 
-Create a `.env` file in `cmd/ordersystem` (same folder as this README):
+```zsh
+docker compose up -d mysql rabbitmq
+```
+
+2. Create a `.env` file in `cmd/ordersystem`:
 
 ```env
 DB_DRIVER=mysql
@@ -67,13 +83,12 @@ WEB_SERVER_PORT=:8000
 GRPC_SERVER_PORT=50051
 GRAPHQL_SERVER_PORT=8080
 RABBITMQ_URL=amqp://guest:guest@localhost:5672/
-````
+```
 
-## Run
-
-From the ordersystem command folder:
+3. Run the application:
 
 ```zsh
+cd cmd/ordersystem
 go run main.go wire_gen.go
 ```
 
@@ -220,34 +235,52 @@ Agora é a hora de botar a mão na massa. Para este desafio, você precisará cr
 
 Este serviço expõe endpoints REST, gRPC e GraphQL para criação e listagem de pedidos, usando MySQL e RabbitMQ como dependências.
 
-## Pré-requisitos
+## Início Rápido
 
-- Go 1.21+ instalado
-- Docker e Docker Compose (para MySQL e RabbitMQ)
-
-## Iniciar Dependências (MySQL + RabbitMQ)
+Para iniciar todos os serviços (MySQL, RabbitMQ e o App):
 
 ```zsh
 docker compose up -d
 ```
 
-- MySQL: `localhost:3306` (db `orders`, usuário `root`, senha `root`)
-- RabbitMQ: `amqp://guest:guest@localhost:5672/` (Interface de gerenciamento `http://localhost:15672/#/`, usuário `guest`, senha `guest`)
+Isso irá:
+
+- Iniciar MySQL na porta `3306` com o banco de dados `orders` (executa migrações automaticamente)
+- Iniciar RabbitMQ na porta `5672` (Interface de gerenciamento na porta `15672`)
+- Construir e iniciar a aplicação automaticamente com:
+  - API REST na porta `8000`
+  - GraphQL na porta `8080`
+  - gRPC na porta `50051`
+
+Para visualizar os logs da aplicação:
+
+```zsh
+docker compose logs -f app
+```
+
+Para parar todos os serviços:
+
+```zsh
+docker compose down
+```
 
 ### Acessando MySQL via Docker
 
-Use Docker Compose para abrir um shell dentro do container MySQL e conectar com o CLI MySQL:
-
 ```zsh
-docker compose exec mysql bash
-mysql -uroot -p orders
+docker compose exec mysql mysql -uroot -proot orders
 ```
 
-- Quando solicitado a senha, digite `root`.
+## Executando Localmente (Desenvolvimento)
 
-## Ambiente
+Se você quiser executar a aplicação localmente (fora do Docker) para desenvolvimento:
 
-Crie um arquivo `.env` em `cmd/ordersystem`:
+1. Inicie apenas as dependências:
+
+```zsh
+docker compose up -d mysql rabbitmq
+```
+
+2. Crie um arquivo `.env` em `cmd/ordersystem`:
 
 ```env
 DB_DRIVER=mysql
@@ -262,11 +295,10 @@ GRAPHQL_SERVER_PORT=8080
 RABBITMQ_URL=amqp://guest:guest@localhost:5672/
 ```
 
-## Executar
-
-A partir da pasta cmd/ordersystem:
+3. Execute a aplicação:
 
 ```zsh
+cd cmd/ordersystem
 go run main.go wire_gen.go
 ```
 
@@ -274,7 +306,7 @@ go run main.go wire_gen.go
 
 - Arquivo: `api/api.http`
   - Abra o arquivo e clique em "Send Request" acima de cada requisição.
-- A API REST roda na porta **8000** (configurada no `.env` como `WEB_SERVER_PORT`).
+- A API REST roda na porta **8000**.
 
 ### Criar Pedido
 
